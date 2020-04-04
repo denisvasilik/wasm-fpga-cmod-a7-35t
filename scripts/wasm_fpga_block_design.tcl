@@ -236,14 +236,14 @@ proc create_root_design { parentCell } {
   # Create interface connections
   connect_bd_intf_net -intf_net wasm_fpga_bus_0_M_MODULE_WB [get_bd_intf_pins wasm_fpga_bus/M_MODULE_WB] [get_bd_intf_pins wasm_fpga_module_interconnect/S_WB]
   connect_bd_intf_net -intf_net wasm_fpga_bus_0_M_STACK_WB [get_bd_intf_pins wasm_fpga_bus/M_STACK_WB] [get_bd_intf_pins wasm_fpga_stack/S_WB]
-  connect_bd_intf_net -intf_net wasm_fpga_bus_0_M_STORE_WB [get_bd_intf_pins wasm_fpga_bus/M_STORE_WB] [get_bd_intf_pins wasm_fpga_store/S_WB]
+  connect_bd_intf_net -intf_net wasm_fpga_bus_M_STORE_WB [get_bd_intf_pins wasm_fpga_bus/M_STORE_WB] [get_bd_intf_pins wasm_fpga_store_interconnect/S_WB]
   connect_bd_intf_net -intf_net wasm_fpga_control_0_M_ENGINE_WB [get_bd_intf_pins wasm_fpga_control/M_ENGINE_WB] [get_bd_intf_pins wasm_fpga_engine/S_WB]
   connect_bd_intf_net -intf_net wasm_fpga_control_0_M_LOADER_WB [get_bd_intf_pins wasm_fpga_control/M_LOADER_WB] [get_bd_intf_pins wasm_fpga_loader/S_WB]
   connect_bd_intf_net -intf_net wasm_fpga_engine_M_BUS_WB [get_bd_intf_pins wasm_fpga_bus/S_WB] [get_bd_intf_pins wasm_fpga_engine/M_BUS_WB]
   connect_bd_intf_net -intf_net wasm_fpga_loader_M_MODULE_WB [get_bd_intf_pins wasm_fpga_loader/M_MODULE_WB] [get_bd_intf_pins wasm_fpga_module_interconnect/S_LOADER_WB]
-  connect_bd_intf_net -intf_net wasm_fpga_loader_M_STORE_WB [get_bd_intf_pins wasm_fpga_loader/M_STORE_WB] [get_bd_intf_pins wasm_fpga_store_interconnect/S_LOADER_WB]
+  connect_bd_intf_net -intf_net wasm_fpga_loader_M_STORE_WB [get_bd_intf_pins wasm_fpga_loader/M_STORE_WB] [get_bd_intf_pins wasm_fpga_store/S_WB]
   connect_bd_intf_net -intf_net wasm_fpga_module_interconnect_M_MEMORY_WB [get_bd_intf_pins wasm_fpga_module_interconnect/M_MEMORY_WB] [get_bd_intf_pins wasm_fpga_module_memory/S_WB]
-  connect_bd_intf_net -intf_net wasm_fpga_store_M_MEMORY_WB [get_bd_intf_pins wasm_fpga_store/M_MEMORY_WB] [get_bd_intf_pins wasm_fpga_store_interconnect/S_WB]
+  connect_bd_intf_net -intf_net wasm_fpga_store_M_MEMORY_WB [get_bd_intf_pins wasm_fpga_store/M_MEMORY_WB] [get_bd_intf_pins wasm_fpga_store_interconnect/S_LOADER_WB]
   connect_bd_intf_net -intf_net wasm_fpga_store_interconnect_M_MEMORY_WB [get_bd_intf_pins wasm_fpga_store_interconnect/M_MEMORY_WB] [get_bd_intf_pins wasm_fpga_store_memory/S_WB]
 
   # Create port connections
