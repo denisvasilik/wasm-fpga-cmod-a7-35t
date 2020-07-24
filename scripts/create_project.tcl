@@ -91,6 +91,14 @@ if {[string equal [get_filesets -quiet sim_1] ""]} {
   create_fileset -simset sim_1
 }
 
+#------------------------------------------------------------------------
+printMessage "Generating project files..."
+
+generate_target all [get_files  "${project_work}/${project_name}.srcs/sources_1/bd/WasmFpga/WasmFpga.bd"]
+
+#------------------------------------------------------------------------
+printMessage "Adding files for simulation..."
+
 # Set 'sim_1' fileset object
 set obj [get_filesets sim_1]
 set files [list \
@@ -107,15 +115,6 @@ foreach i $files {
     set file_obj [get_files -of_objects [get_filesets sim_1] [list $i]]
     set_property "file_type" "VHDL" $file_obj
 }
-
-#------------------------------------------------------------------------
-printMessage "Generating project files..."
-
-generate_target all [get_files  "${project_work}/${project_name}.srcs/sources_1/bd/WasmFpga/WasmFpga.bd"]
-
-#------------------------------------------------------------------------
-# Block design and other IP inclusion
-printMessage "Adding files for simulation..."
 
 # Set 'sim_1' fileset properties
 set obj [get_filesets sim_1]
