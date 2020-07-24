@@ -12,7 +12,7 @@ prepare-dependencies:
 	(cd ../wasm-fpga-store && make hxs)
 	(cd ../wasm-fpga-stack && make hxs)
 
-project: prepare prepare-dependencies
+project: prepare prepare-dependencies fetch-definitions
 	@vivado -mode batch \
 			-source scripts/create_project.tcl \
 			-notrace \
@@ -27,6 +27,20 @@ write_block_design:
 		-nojournal \
 		-tempDir work \
 		-log work/vivado.log
+
+fetch-definitions:
+	mkdir -p resources
+	cp ../wasm-fpga-stack/hxs_gen/vhd_gen/header/* resources
+	cp ../wasm-fpga-stack/hxs_gen/vhd_gen/wishbone/* resources
+	cp ../wasm-fpga-store/hxs_gen/vhd_gen/header/* resources
+	cp ../wasm-fpga-store/hxs_gen/vhd_gen/wishbone/* resources
+	cp ../wasm-fpga-bus/hxs_gen/vhd_gen/header/* resources
+	cp ../wasm-fpga-bus/hxs_gen/vhd_gen/wishbone/* resources
+	cp ../wasm-fpga-loader/hxs_gen/vhd_gen/header/* resources
+	cp ../wasm-fpga-loader/hxs_gen/vhd_gen/wishbone/* resources
+	cp ../wasm-fpga-engine/hxs_gen/vhd_gen/header/* resources
+	cp ../wasm-fpga-engine/hxs_gen/vhd_gen/wishbone/* resources
+
 
 clean:
 	@rm -rf .Xil \
