@@ -40,10 +40,8 @@ architecture behavioural of tb_WasmFpgaTop is
     component WasmFpgaTop
       port (
         Clk : in std_logic;
-        nRst : in std_logic;
+        Rst : in std_logic;
         Run : in std_logic;
-        Step : in std_logic;
-        Debug : in std_logic;
         Busy : out std_logic;
         Trap : out std_logic;
         Loaded : out std_logic
@@ -83,10 +81,8 @@ begin
     WasmFpgaTop_i : WasmFpgaTop
         port map (
             Clk => Clk100M,
-            nRst => nRst,
+            Rst => Rst,
             Run => FileIo_WasmFpga.Run,
-            Step => FileIo_WasmFpga.Step,
-            Debug => FileIo_WasmFpga.Debug,
             Busy => WasmFpga_FileIo.Busy,
             Trap => WasmFpga_FileIo.Trap,
             Loaded => WasmFpga_FileIo.Loaded

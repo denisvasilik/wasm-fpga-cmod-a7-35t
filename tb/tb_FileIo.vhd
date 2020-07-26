@@ -157,8 +157,6 @@ begin
     begin  -- process Read_file
 
         FileIo_WasmFpga.Run <= '0';
-        FileIo_WasmFpga.Step <= '0';
-        FileIo_WasmFpga.Debug <= '0';
 
         -----------------------------------------------------------------------
         --           Stimulus file instruction definition
@@ -817,18 +815,6 @@ begin
                         FileIo_WasmFpga.Run <= '0';
                     else
                         FileIo_WasmFpga.Run <= '1';
-                    end if;
-                elsif (par1 = 2) then
-                    if(par2 = 0) then
-                        FileIo_WasmFpga.Step <= '0';
-                    else
-                        FileIo_WasmFpga.Step <= '1';
-                    end if;
-                elsif (par1 = 3) then
-                    if(par2 = 0) then
-                        FileIo_WasmFpga.Debug <= '0';
-                    else
-                        FileIo_WasmFpga.Debug <= '1';
                     end if;
                 else
                     assert (false)

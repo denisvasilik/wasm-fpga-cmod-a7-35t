@@ -14,8 +14,6 @@ package tb_Types is
     type T_FileIo_WasmFpga is
     record
         Run : std_logic;
-        Step : std_logic;
-        Debug : std_logic;
     end record;
 
 end package;

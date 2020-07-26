@@ -8,10 +8,8 @@ library work;
 entity WasmFpgaTop is
   port ( 
     Clk : in std_logic;
-    nRst : in std_logic;
+    Rst : in std_logic;
     Run : in std_logic;
-    Step : in std_logic;
-    Debug : in std_logic;
     Busy : out std_logic;
     Trap : out std_logic;
     Loaded : out std_logic
@@ -32,17 +30,17 @@ architecture WasmFpgaArchitecture of WasmFpgaTop is
     );
   end component;
 
-  signal Rst : std_logic;
+  signal nRst : std_logic;
 
 begin
 
-  Rst <= not nRst;
+  nRst <= not Rst;
 
   WasmFpga_wrapper_i : WasmFpga_wrapper
     port map (
       Busy => Busy,
       Clk => Clk,
-      Debug => Debug,
+      Debug => '0',
       Loaded => Loaded,
       Run => Run,
       Trap => Trap,
