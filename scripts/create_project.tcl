@@ -84,6 +84,31 @@ make_wrapper -files [get_files ${board_design_filepath}] -top
 add_files -norecurse -fileset $obj $board_design_wrapper_filepath
 
 #------------------------------------------------------------------------
+printMessage "Adding constraint files..."
+
+if {[string equal [get_filesets -quiet constrs_1] ""]} {
+  create_fileset -constrset constrs_1
+}
+
+# Set 'constrs_1' fileset object
+set obj [get_filesets constrs_1]
+
+set files_cons [list \
+ "[file normalize "${project_constraints}/WasmFpgaIO.xdc"]"\
+ "[file normalize "${project_constraints}/WasmFpgaTiming.xdc"]"\
+]
+
+add_files -fileset constrs_1 $files_cons
+
+foreach i $files_cons {
+    #puts $i
+    set file_obj [get_files -of_objects [get_filesets constrs_1] [list $i]]
+    set_property -name "file_type" -value "XDC" -objects $file_obj
+    set_property -name "used_in_implementation" -value "1" -objects $file_obj
+    set_property -name "used_in_synthesis" -value "1" -objects $file_obj
+}
+
+#------------------------------------------------------------------------
 printMessage "Adding simulation files..."
 
 # Create 'sim_1' fileset (if not found)
