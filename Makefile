@@ -41,12 +41,20 @@ fetch-definitions:
 	cp ../wasm-fpga-engine/hxs_gen/vhd_gen/header/* resources
 	cp ../wasm-fpga-engine/hxs_gen/vhd_gen/wishbone/* resources
 
-
 clean:
-	@rm -rf .Xil \
-		vivado*.log \
-		vivado*.str \
-		vivado*.jou \
-		work \
+	@find ip ! -iname *.xci -type f -exec rm {} +
+	@rm -rf .Xil vivado*.log vivado*.str vivado*.jou
+	@rm -rf work \
+		src-gen \
+		hxs_gen \
+		*.egg-info \
+		dist \
+	@rm -rf ip/**/hdl \
+		ip/**/synth \
+		ip/**/example_design \
+		ip/**/sim \
+		ip/**/simulation \
+		ip/**/misc \
+		ip/**/doc
 
 .PHONY: all prepare project clean
