@@ -77,6 +77,17 @@ set_property -name "top_auto_set" -value "0" -objects $obj
 set_property -name "top_file" -value "${project_src}/WasmFpgaTop.vhd" -objects $obj
 
 #------------------------------------------------------------------------
+# Block design and other IP inclusion
+printMessage "Adding IP cores..."
+
+set files [list \
+ "[file normalize "${project_ip}/SystemClockGenerator/SystemClockGenerator.xci"]"\
+ "[file normalize "${project_ip}/SystemResetGenerator/SystemResetGenerator.xci"]"\
+]
+
+add_files -fileset sources_1 $files
+
+#------------------------------------------------------------------------
 printMessage "Creating block design..."
 source "${project_scripts}/wasm_fpga_block_design.tcl"
 
