@@ -57,6 +57,7 @@ architecture WasmFpgaArchitecture of WasmFpgaTop is
 
   signal Clk100M : std_logic;
   signal nRst : std_logic;
+  signal interconnect_aresetn : std_logic_vector(0 downto 0);
   signal Locked : std_logic;
 
   signal usCount : unsigned (6 downto 0);
@@ -80,6 +81,8 @@ architecture WasmFpgaArchitecture of WasmFpgaTop is
 
 begin
 
+  nRst <= interconnect_aresetn(0);
+
   Active <= LedPulse500ms;
 
   SystemClockGenerator_i : SystemClockGenerator
@@ -100,7 +103,7 @@ begin
       mb_reset => open,
       bus_struct_reset => open,
       peripheral_reset => open,
-      interconnect_aresetn => nRst,
+      interconnect_aresetn => interconnect_aresetn,
       peripheral_aresetn => open
   );
 
