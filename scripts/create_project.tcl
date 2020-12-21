@@ -1,7 +1,7 @@
 set project_origin "../"
 set project_work  "work"
 set project_name "WasmFpgaCmodA7-35T"
-set project_part "xc7a100tcsg324-1"
+set project_part "xc7a35tcpg236-1"
 set project_src  "src"
 set project_src_gen "hxs_gen"
 set project_ip "ip"
