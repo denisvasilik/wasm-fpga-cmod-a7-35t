@@ -24,30 +24,6 @@ architecture behavioural of tb_WasmFpgaTop is
     signal WasmFpga_FileIo : T_WasmFpga_FileIo;
     signal FileIo_WasmFpga : T_FileIo_WasmFpga;
 
-    component tb_FileIo is
-        generic (
-            stimulus_path: in string;
-            stimulus_file: in string
-        );
-        port (
-            Clk : in std_logic;
-            Rst : in std_logic;
-            WasmFpga_FileIo : in T_WasmFpga_FileIo;
-            FileIo_WasmFpga : out T_FileIo_WasmFpga
-        );
-    end component;
-
-    component WasmFpgaTop
-      port (
-        Clk : in std_logic;
-        Rst : in std_logic;
-        Run : in std_logic;
-        Busy : out std_logic;
-        Trap : out std_logic;
-        Loaded : out std_logic
-      );
-    end component;
-
 begin
 
     nRst <= not Rst;
@@ -66,7 +42,7 @@ begin
         wait;
     end process;
 
-    tb_FileIo_i : tb_FileIo
+    tb_FileIo_i : entity work.tb_FileIo
         generic map (
             stimulus_path => stimulus_path,
             stimulus_file => stimulus_file
@@ -78,14 +54,17 @@ begin
             FileIo_WasmFpga => FileIo_WasmFpga
         );
 
-    WasmFpgaTop_i : WasmFpgaTop
+    WasmFpgaTop_i : entity work.WasmFpgaTop
         port map (
-            Clk => Clk100M,
+            Clk12M => Clk100M,
             Rst => Rst,
             Run => FileIo_WasmFpga.Run,
             Busy => WasmFpga_FileIo.Busy,
             Trap => WasmFpga_FileIo.Trap,
-            Loaded => WasmFpga_FileIo.Loaded
+            Loaded => WasmFpga_FileIo.Loaded,
+            Active => open,
+            UartRx => '0',
+            UartTx => open
        );
 
 end;

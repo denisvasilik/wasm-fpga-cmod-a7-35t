@@ -2,4 +2,3 @@ hxs_gen
 work
 ip/*
 !ip/*.xci
-resources/*

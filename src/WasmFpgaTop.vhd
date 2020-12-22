@@ -13,23 +13,13 @@ entity WasmFpgaTop is
     Busy : out std_logic;
     Trap : out std_logic;
     Loaded : out std_logic;
-    Active : out std_logic
+    Active : out std_logic;
+    UartRx : in std_logic;
+    UartTx : out std_logic
   );
 end entity WasmFpgaTop;
 
 architecture WasmFpgaArchitecture of WasmFpgaTop is
-
-  component WasmFpga_wrapper is
-    port (
-      Busy : out std_logic;
-      Clk : in std_logic;
-      Debug : in std_logic;
-      Loaded : out std_logic;
-      Run : in std_logic;
-      Trap : out std_logic;
-      nRst : in std_logic
-    );
-  end component;
 
   component SystemClockGenerator is
     port (
@@ -107,7 +97,7 @@ begin
       peripheral_aresetn => open
   );
 
-  WasmFpga_wrapper_i : WasmFpga_wrapper
+  WasmFpga_wrapper_i : entity work.WasmFpga_wrapper
     port map (
       Busy => Busy,
       Clk => Clk100M,
@@ -115,6 +105,8 @@ begin
       Loaded => Loaded,
       Run => Run,
       Trap => Trap,
+      UartRx => UartRx,
+      UartTx => UartTx,
       nRst => nRst
     );
 
