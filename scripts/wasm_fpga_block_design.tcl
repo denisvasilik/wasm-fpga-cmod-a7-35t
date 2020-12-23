@@ -246,8 +246,11 @@ proc create_root_design { parentCell } {
   # Create instance: wasm_fpga_store_memory, and set properties
   set wasm_fpga_store_memory [ create_bd_cell -type ip -vlnv denisvasilik.com:denisvasilik:wasm_fpga_memory:1.0 wasm_fpga_store_memory ]
 
-  # Create instance: wasm_fpga_uart_0, and set properties
-  set wasm_fpga_uart_0 [ create_bd_cell -type ip -vlnv denisvasilik.com:denisvasilik:wasm_fpga_uart:1.0 wasm_fpga_uart_0 ]
+  # Create instance: wasm_fpga_uart, and set properties
+  set wasm_fpga_uart [ create_bd_cell -type ip -vlnv denisvasilik.com:denisvasilik:wasm_fpga_uart:1.0 wasm_fpga_uart ]
+
+  # Create instance: wasm_fpga_uart_interconnect, and set properties
+  set wasm_fpga_uart_interconnect [ create_bd_cell -type ip -vlnv denisvasilik.com:denisvasilik:wasm_fpga_uart_interconnect:1.0 wasm_fpga_uart_interconnect ]
 
   # Create interface connections
   connect_bd_intf_net -intf_net wasm_fpga_bus_0_M_MODULE_WB [get_bd_intf_pins wasm_fpga_bus/M_MODULE_WB] [get_bd_intf_pins wasm_fpga_memory_interconnect/S_WB]
@@ -256,7 +259,7 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net wasm_fpga_bus_M_STORE_WB [get_bd_intf_pins wasm_fpga_bus/M_STORE_WB] [get_bd_intf_pins wasm_fpga_store_interconnect/S_WB]
   connect_bd_intf_net -intf_net wasm_fpga_control_0_M_ENGINE_WB [get_bd_intf_pins wasm_fpga_control/M_ENGINE_WB] [get_bd_intf_pins wasm_fpga_engine/S_WB]
   connect_bd_intf_net -intf_net wasm_fpga_control_0_M_LOADER_WB [get_bd_intf_pins wasm_fpga_control/M_LOADER_WB] [get_bd_intf_pins wasm_fpga_loader/S_WB]
-  connect_bd_intf_net -intf_net wasm_fpga_control_M_UART_WB [get_bd_intf_pins wasm_fpga_control/M_UART_WB] [get_bd_intf_pins wasm_fpga_uart_0/S_WB]
+  connect_bd_intf_net -intf_net wasm_fpga_control_M_UART_WB [get_bd_intf_pins wasm_fpga_control/M_UART_WB] [get_bd_intf_pins wasm_fpga_uart_interconnect/S_CONTROL_WB]
   connect_bd_intf_net -intf_net wasm_fpga_engine_M_BUS_WB [get_bd_intf_pins wasm_fpga_bus/S_WB] [get_bd_intf_pins wasm_fpga_engine/M_BUS_WB]
   connect_bd_intf_net -intf_net wasm_fpga_loader_M_MODULE_WB [get_bd_intf_pins wasm_fpga_loader/M_MODULE_WB] [get_bd_intf_pins wasm_fpga_memory_interconnect/S_LOADER_WB]
   connect_bd_intf_net -intf_net wasm_fpga_loader_M_STORE_WB [get_bd_intf_pins wasm_fpga_loader/M_STORE_WB] [get_bd_intf_pins wasm_fpga_store_interconnect/S_LOADER_WB]
@@ -264,17 +267,18 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net wasm_fpga_stack_M_MEMORY_WB [get_bd_intf_pins wasm_fpga_stack/M_MEMORY_WB] [get_bd_intf_pins wasm_fpga_stack_memory/S_WB]
   connect_bd_intf_net -intf_net wasm_fpga_store_M_MEMORY_WB [get_bd_intf_pins wasm_fpga_store/M_MEMORY_WB] [get_bd_intf_pins wasm_fpga_store_memory/S_WB]
   connect_bd_intf_net -intf_net wasm_fpga_store_interconnect_M_WB [get_bd_intf_pins wasm_fpga_store/S_WB] [get_bd_intf_pins wasm_fpga_store_interconnect/M_WB]
+  connect_bd_intf_net -intf_net wasm_fpga_uart_interconnect_M_UART_WB [get_bd_intf_pins wasm_fpga_uart/S_WB] [get_bd_intf_pins wasm_fpga_uart_interconnect/M_UART_WB]
 
   # Create port connections
-  connect_bd_net -net Clk_0_1 [get_bd_ports Clk] [get_bd_pins wasm_fpga_bus/Clk] [get_bd_pins wasm_fpga_control/Clk] [get_bd_pins wasm_fpga_engine/Clk] [get_bd_pins wasm_fpga_loader/Clk] [get_bd_pins wasm_fpga_memory/Clk] [get_bd_pins wasm_fpga_memory_memory/Clk] [get_bd_pins wasm_fpga_stack/Clk] [get_bd_pins wasm_fpga_stack_memory/Clk] [get_bd_pins wasm_fpga_store/Clk] [get_bd_pins wasm_fpga_store_memory/Clk] [get_bd_pins wasm_fpga_uart_0/Clk]
+  connect_bd_net -net Clk_0_1 [get_bd_ports Clk] [get_bd_pins wasm_fpga_bus/Clk] [get_bd_pins wasm_fpga_control/Clk] [get_bd_pins wasm_fpga_engine/Clk] [get_bd_pins wasm_fpga_loader/Clk] [get_bd_pins wasm_fpga_memory/Clk] [get_bd_pins wasm_fpga_memory_memory/Clk] [get_bd_pins wasm_fpga_stack/Clk] [get_bd_pins wasm_fpga_stack_memory/Clk] [get_bd_pins wasm_fpga_store/Clk] [get_bd_pins wasm_fpga_store_memory/Clk] [get_bd_pins wasm_fpga_uart/Clk]
   connect_bd_net -net Debug_0_1 [get_bd_ports Debug] [get_bd_pins wasm_fpga_control/Debug]
   connect_bd_net -net Run_0_1 [get_bd_ports Run] [get_bd_pins wasm_fpga_control/Run]
-  connect_bd_net -net UartRx_0_1 [get_bd_ports UartRx] [get_bd_pins wasm_fpga_uart_0/UartRx]
-  connect_bd_net -net nRst_0_1 [get_bd_ports nRst] [get_bd_pins wasm_fpga_bus/nRst] [get_bd_pins wasm_fpga_control/nRst] [get_bd_pins wasm_fpga_engine/nRst] [get_bd_pins wasm_fpga_loader/nRst] [get_bd_pins wasm_fpga_memory/nRst] [get_bd_pins wasm_fpga_memory_memory/nRst] [get_bd_pins wasm_fpga_stack/nRst] [get_bd_pins wasm_fpga_stack_memory/nRst] [get_bd_pins wasm_fpga_store/nRst] [get_bd_pins wasm_fpga_store_memory/nRst] [get_bd_pins wasm_fpga_uart_0/nRst]
+  connect_bd_net -net UartRx_0_1 [get_bd_ports UartRx] [get_bd_pins wasm_fpga_uart/UartRx]
+  connect_bd_net -net nRst_0_1 [get_bd_ports nRst] [get_bd_pins wasm_fpga_bus/nRst] [get_bd_pins wasm_fpga_control/nRst] [get_bd_pins wasm_fpga_engine/nRst] [get_bd_pins wasm_fpga_loader/nRst] [get_bd_pins wasm_fpga_memory/nRst] [get_bd_pins wasm_fpga_memory_memory/nRst] [get_bd_pins wasm_fpga_stack/nRst] [get_bd_pins wasm_fpga_stack_memory/nRst] [get_bd_pins wasm_fpga_store/nRst] [get_bd_pins wasm_fpga_store_memory/nRst] [get_bd_pins wasm_fpga_uart/nRst]
   connect_bd_net -net wasm_fpga_control_0_Busy [get_bd_ports Busy] [get_bd_pins wasm_fpga_control/Busy]
   connect_bd_net -net wasm_fpga_engine_Trap [get_bd_ports Trap] [get_bd_pins wasm_fpga_engine/Trap]
   connect_bd_net -net wasm_fpga_loader_Loaded [get_bd_ports Loaded] [get_bd_pins wasm_fpga_loader/Loaded] [get_bd_pins wasm_fpga_memory_interconnect/Loaded] [get_bd_pins wasm_fpga_store_interconnect/Loaded]
-  connect_bd_net -net wasm_fpga_uart_0_UartTx [get_bd_ports UartTx] [get_bd_pins wasm_fpga_uart_0/UartTx]
+  connect_bd_net -net wasm_fpga_uart_0_UartTx [get_bd_ports UartTx] [get_bd_pins wasm_fpga_uart/UartTx]
 
   # Create address segments
 

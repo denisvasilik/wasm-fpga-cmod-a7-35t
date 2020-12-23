@@ -58,6 +58,7 @@ set_property "ip_repo_paths" "\
  [file normalize "${project_origin}/wasm-fpga-bus"] \
  [file normalize "${project_origin}/wasm-fpga-control"] \
  [file normalize "${project_origin}/wasm-fpga-uart"] \
+ [file normalize "${project_origin}/wasm-fpga-uart-interconnect"] \
  " $obj
 
 # Rebuild user ip_repo's index before adding any source files
