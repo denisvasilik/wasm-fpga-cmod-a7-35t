@@ -7,6 +7,9 @@ convert:
 	wat2wasm resources/WasmFpgaModule.wat -o resources/WasmFpgaModule.wasm
 	wat2wasm resources/WasmFpgaModule.wat -v 2> resources/WasmFpgaModule.txt
 	rm WasmFpgaModule.wasm
+	binalyzer vmf --input-file resources/WasmFpgaModule.wasm \
+				  --output-file resources/mem.vmf \
+				  --start-offset 0x300000
 
 prepare:
 	@mkdir -p work
