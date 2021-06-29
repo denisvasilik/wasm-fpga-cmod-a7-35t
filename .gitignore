@@ -5,3 +5,7 @@ ip/*
 resources/WasmFpgaModule.txt
 resources/WasmFpgaModule.wasm
 resources/WasmFpgaTop.bit
+resources/WasmFpgaTop.mcs
+resources/WasmFpgaTop.prm
+resources/n25q128a13e_3v_micronxip_vg12.tar.gz
+simstm/src-gen
