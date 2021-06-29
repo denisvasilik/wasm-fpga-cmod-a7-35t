@@ -13,6 +13,8 @@ part of it:
 * [WebAssembly Bus]
 * [WebAssembly Interconnect]
 * [WebAssembly Memory]
+* [WebAssembly Flash]
+* [WebAssembly Debug]
 
 ## Documents
 
@@ -24,6 +26,7 @@ part of it:
 ## Prerequisites
 
 * Vivado 2019.2
+* [The WebAssembly Binary Toolkit]
 
 ## Build
 
@@ -62,7 +65,10 @@ Bitstream cannot be created since the project is experimental and under developm
 [WebAssembly Bus]: https://github.com/denisvasilik/wasm-fpga-bus
 [WebAssembly Interconnect]: https://github.com/denisvasilik/wasm-fpga-interconnect
 [WebAssembly Memory]: https://github.com/denisvasilik/wasm-fpga-memory
+[WebAssembly Flash]: https://github.com/denisvasilik/wasm-fpga-flash
+[WebAssembly Debug]: https://github.com/denisvasilik/wasm-fpga-debug
 [CMOD A7 Master XDC File]: https://github.com/Digilent/digilent-xdc/blob/master/Cmod-A7-Master.xdc
 [CMOD A7 Schematic]: https://reference.digilentinc.com/_media/reference/programmable-logic/cmod-a7/cmod_a7_sch.pdf
 [CMOD A7 Data Sheet]: https://www.xilinx.com/support/documentation/data_sheets/ds181_Artix_7_Data_Sheet.pdf
 [CMOD A7 Reference Manual]: https://reference.digilentinc.com/reference/programmable-logic/cmod-a7/reference-manual
+[The WebAssembly Binary Toolkit]: https://github.com/WebAssembly/wabt
