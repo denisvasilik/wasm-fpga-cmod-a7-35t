@@ -15,23 +15,32 @@ end;
 
 architecture behavioural of tb_WasmFpgaTop is
 
-    constant CLK100M_PERIOD : time := 10 ns;
+    constant CLK12M_PERIOD : time := 83.333 ns;
 
-    signal Clk100M : std_logic := '0';
+    signal Clk12M : std_logic := '0';
     signal Rst : std_logic := '1';
     signal nRst : std_logic := '0';
 
     signal WasmFpga_FileIo : T_WasmFpga_FileIo;
     signal FileIo_WasmFpga : T_FileIo_WasmFpga;
 
+    signal SpiFlash_MiSo : std_logic;
+    signal SpiFlash_MoSi : std_logic;
+    signal SpiFlash_SClk : std_logic;
+    signal SpiFlash_CsNeg : std_logic;
+    signal SpiFlash_nWp : std_logic;
+    signal SpiFlash_nHold : std_logic;
+
 begin
 
     nRst <= not Rst;
 
-    Clk100MGen : process is
+    WasmFpga_FileIo.Busy <= '0';
+
+    Clk12MGen : process is
     begin
-        Clk100M <= not Clk100M;
-        wait for CLK100M_PERIOD / 2;
+        Clk12M <= not Clk12M;
+        wait for CLK12M_PERIOD / 2;
     end process;
 
     RstGen : process is
@@ -48,7 +57,7 @@ begin
             stimulus_file => stimulus_file
         )
         port map (
-            Clk => Clk100M,
+            Clk => Clk12M,
             Rst => Rst,
             WasmFpga_FileIo => WasmFpga_FileIo,
             FileIo_WasmFpga => FileIo_WasmFpga
@@ -56,15 +65,30 @@ begin
 
     WasmFpgaTop_i : entity work.WasmFpgaTop
         port map (
-            Clk12M => Clk100M,
+            Clk12M => Clk12M,
             Rst => Rst,
-            Run => FileIo_WasmFpga.Run,
-            Busy => WasmFpga_FileIo.Busy,
             Trap => WasmFpga_FileIo.Trap,
             Loaded => WasmFpga_FileIo.Loaded,
-            Active => open,
             UartRx => '0',
-            UartTx => open
+            UartTx => open,
+            MiSo => SpiFlash_MiSo,
+            MoSi => SpiFlash_MoSi,
+            SClk => SpiFlash_SClk,
+            nCs => SpiFlash_CsNeg,
+            nWp => SpiFlash_nWp,
+            nHold => SpiFlash_nHold,
+            Active => open
        );
+
+    N25Q128A13E_i : entity work.N25Qxxx
+        port map (
+            S => SpiFlash_CsNeg,
+            C => SpiFlash_SClk,
+            HOLD_DQ3 => SpiFlash_nHold,
+            DQ0 => SpiFlash_MoSi,
+            DQ1 => SpiFlash_MiSo,
+            Vcc => x"00000BB8",
+            Vpp_W_DQ2 => SpiFlash_nWp
+        );
 
 end;

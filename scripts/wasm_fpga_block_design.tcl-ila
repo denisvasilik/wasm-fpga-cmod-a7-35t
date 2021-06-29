@@ -123,6 +123,7 @@ set bCheckIPsPassed 1
 set bCheckIPs 1
 if { $bCheckIPs == 1 } {
    set list_check_ips "\ 
+xilinx.com:ip:ila:6.2\
 denisvasilik.com:denisvasilik:wasm_fpga_bus:1.0\
 denisvasilik.com:denisvasilik:wasm_fpga_control:1.0\
 denisvasilik.com:denisvasilik:wasm_fpga_debug:1.0\
@@ -202,12 +203,50 @@ proc create_root_design { parentCell } {
   set Loaded [ create_bd_port -dir O Loaded ]
   set MiSo [ create_bd_port -dir I MiSo ]
   set MoSi [ create_bd_port -dir O MoSi ]
+  set Run [ create_bd_port -dir I Run ]
   set SClk [ create_bd_port -dir O SClk ]
   set Trap [ create_bd_port -dir O Trap ]
   set UartRx [ create_bd_port -dir I UartRx ]
   set UartTx [ create_bd_port -dir O UartTx ]
   set nCs [ create_bd_port -dir O nCs ]
   set nRst [ create_bd_port -dir I -type rst nRst ]
+
+  # Create instance: ila_0, and set properties
+  set ila_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 ila_0 ]
+  set_property -dict [ list \
+   CONFIG.ALL_PROBE_SAME_MU_CNT {2} \
+   CONFIG.C_ENABLE_ILA_AXI_MON {false} \
+   CONFIG.C_EN_STRG_QUAL {1} \
+   CONFIG.C_MONITOR_TYPE {Native} \
+   CONFIG.C_NUM_OF_PROBES {25} \
+   CONFIG.C_PROBE0_MU_CNT {2} \
+   CONFIG.C_PROBE0_WIDTH {1} \
+   CONFIG.C_PROBE10_MU_CNT {2} \
+   CONFIG.C_PROBE11_MU_CNT {2} \
+   CONFIG.C_PROBE11_WIDTH {4} \
+   CONFIG.C_PROBE12_MU_CNT {2} \
+   CONFIG.C_PROBE13_MU_CNT {2} \
+   CONFIG.C_PROBE13_WIDTH {24} \
+   CONFIG.C_PROBE14_MU_CNT {2} \
+   CONFIG.C_PROBE17_WIDTH {32} \
+   CONFIG.C_PROBE19_WIDTH {32} \
+   CONFIG.C_PROBE1_MU_CNT {2} \
+   CONFIG.C_PROBE1_WIDTH {32} \
+   CONFIG.C_PROBE21_WIDTH {4} \
+   CONFIG.C_PROBE23_WIDTH {24} \
+   CONFIG.C_PROBE2_MU_CNT {2} \
+   CONFIG.C_PROBE2_WIDTH {24} \
+   CONFIG.C_PROBE3_MU_CNT {2} \
+   CONFIG.C_PROBE4_MU_CNT {2} \
+   CONFIG.C_PROBE4_WIDTH {4} \
+   CONFIG.C_PROBE5_MU_CNT {2} \
+   CONFIG.C_PROBE6_MU_CNT {2} \
+   CONFIG.C_PROBE7_MU_CNT {2} \
+   CONFIG.C_PROBE7_WIDTH {32} \
+   CONFIG.C_PROBE8_MU_CNT {2} \
+   CONFIG.C_PROBE9_MU_CNT {2} \
+   CONFIG.C_PROBE9_WIDTH {32} \
+ ] $ila_0
 
   # Create instance: wasm_fpga_bus, and set properties
   set wasm_fpga_bus [ create_bd_cell -type ip -vlnv denisvasilik.com:denisvasilik:wasm_fpga_bus:1.0 wasm_fpga_bus ]
@@ -277,16 +316,41 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net wasm_fpga_store_interconnect_M_WB [get_bd_intf_pins wasm_fpga_store/S_WB] [get_bd_intf_pins wasm_fpga_store_interconnect/M_WB]
 
   # Create port connections
-  connect_bd_net -net Clk_0_1 [get_bd_ports Clk] [get_bd_pins wasm_fpga_bus/Clk] [get_bd_pins wasm_fpga_control/Clk] [get_bd_pins wasm_fpga_debug/Clk] [get_bd_pins wasm_fpga_engine/Clk] [get_bd_pins wasm_fpga_flash/Clk] [get_bd_pins wasm_fpga_loader/Clk] [get_bd_pins wasm_fpga_memory/Clk] [get_bd_pins wasm_fpga_module_memory/Clk] [get_bd_pins wasm_fpga_stack/Clk] [get_bd_pins wasm_fpga_stack_memory/Clk] [get_bd_pins wasm_fpga_store/Clk] [get_bd_pins wasm_fpga_store_memory/Clk] [get_bd_pins wasm_fpga_uart/Clk]
+  connect_bd_net -net Clk_0_1 [get_bd_ports Clk] [get_bd_pins ila_0/clk] [get_bd_pins wasm_fpga_bus/Clk] [get_bd_pins wasm_fpga_control/Clk] [get_bd_pins wasm_fpga_debug/Clk] [get_bd_pins wasm_fpga_engine/Clk] [get_bd_pins wasm_fpga_flash/Clk] [get_bd_pins wasm_fpga_loader/Clk] [get_bd_pins wasm_fpga_memory/Clk] [get_bd_pins wasm_fpga_module_memory/Clk] [get_bd_pins wasm_fpga_stack/Clk] [get_bd_pins wasm_fpga_stack_memory/Clk] [get_bd_pins wasm_fpga_store/Clk] [get_bd_pins wasm_fpga_store_memory/Clk] [get_bd_pins wasm_fpga_uart/Clk]
   connect_bd_net -net MiSo_0_1 [get_bd_ports MiSo] [get_bd_pins wasm_fpga_flash/MiSo]
+  connect_bd_net -net Run_0_1 [get_bd_ports Run] [get_bd_pins wasm_fpga_control/Run]
   connect_bd_net -net UartRx_0_1 [get_bd_ports UartRx] [get_bd_pins wasm_fpga_uart/UartRx]
   connect_bd_net -net nRst_0_1 [get_bd_ports nRst] [get_bd_pins wasm_fpga_bus/nRst] [get_bd_pins wasm_fpga_control/nRst] [get_bd_pins wasm_fpga_debug/nRst] [get_bd_pins wasm_fpga_engine/nRst] [get_bd_pins wasm_fpga_flash/nRst] [get_bd_pins wasm_fpga_loader/nRst] [get_bd_pins wasm_fpga_memory/nRst] [get_bd_pins wasm_fpga_module_memory/nRst] [get_bd_pins wasm_fpga_stack/nRst] [get_bd_pins wasm_fpga_stack_memory/nRst] [get_bd_pins wasm_fpga_store/nRst] [get_bd_pins wasm_fpga_store_memory/nRst] [get_bd_pins wasm_fpga_uart/nRst]
   connect_bd_net -net wasm_fpga_engine_Trap [get_bd_ports Trap] [get_bd_pins wasm_fpga_engine/Trap]
   connect_bd_net -net wasm_fpga_flash_0_CsNeg [get_bd_ports nCs] [get_bd_pins wasm_fpga_flash/CsNeg]
   connect_bd_net -net wasm_fpga_flash_0_MoSi [get_bd_ports MoSi] [get_bd_pins wasm_fpga_flash/MoSi]
   connect_bd_net -net wasm_fpga_flash_0_SClk [get_bd_ports SClk] [get_bd_pins wasm_fpga_flash/SClk]
-  connect_bd_net -net wasm_fpga_flash_Loaded [get_bd_pins wasm_fpga_control/Run] [get_bd_pins wasm_fpga_flash/Loaded]
+  connect_bd_net -net wasm_fpga_flash_Loaded [get_bd_pins ila_0/probe0] [get_bd_pins wasm_fpga_flash/Loaded]
+  connect_bd_net -net wasm_fpga_flash_Module_Adr [get_bd_pins ila_0/probe2] [get_bd_pins wasm_fpga_flash/Module_Adr] [get_bd_pins wasm_fpga_memory_interconnect/Flash_Adr]
+  connect_bd_net -net wasm_fpga_flash_Module_Cyc [get_bd_pins ila_0/probe3] [get_bd_pins wasm_fpga_flash/Module_Cyc] [get_bd_pins wasm_fpga_memory_interconnect/Flash_Cyc]
+  connect_bd_net -net wasm_fpga_flash_Module_DatOut [get_bd_pins ila_0/probe1] [get_bd_pins wasm_fpga_flash/Module_DatOut] [get_bd_pins wasm_fpga_memory_interconnect/Flash_DatIn]
+  connect_bd_net -net wasm_fpga_flash_Module_Sel [get_bd_pins ila_0/probe4] [get_bd_pins wasm_fpga_flash/Module_Sel] [get_bd_pins wasm_fpga_memory_interconnect/Flash_Sel]
+  connect_bd_net -net wasm_fpga_flash_Module_Stb [get_bd_pins ila_0/probe5] [get_bd_pins wasm_fpga_flash/Module_Stb] [get_bd_pins wasm_fpga_memory_interconnect/Flash_Stb]
+  connect_bd_net -net wasm_fpga_flash_Module_We [get_bd_pins ila_0/probe6] [get_bd_pins wasm_fpga_flash/Module_We] [get_bd_pins wasm_fpga_memory_interconnect/Flash_We]
   connect_bd_net -net wasm_fpga_loader_Loaded [get_bd_ports Loaded] [get_bd_pins wasm_fpga_loader/Loaded]
+  connect_bd_net -net wasm_fpga_loader_Memory_Adr [get_bd_pins ila_0/probe13] [get_bd_pins wasm_fpga_loader/Memory_Adr] [get_bd_pins wasm_fpga_memory_interconnect/Loader_Adr]
+  connect_bd_net -net wasm_fpga_loader_Memory_Cyc [get_bd_pins ila_0/probe12] [get_bd_pins wasm_fpga_loader/Memory_Cyc] [get_bd_pins wasm_fpga_memory_interconnect/Loader_Cyc]
+  connect_bd_net -net wasm_fpga_loader_Memory_DatOut [get_bd_pins ila_0/probe9] [get_bd_pins wasm_fpga_loader/Memory_DatOut] [get_bd_pins wasm_fpga_memory_interconnect/Loader_DatIn]
+  connect_bd_net -net wasm_fpga_loader_Memory_Sel [get_bd_pins ila_0/probe11] [get_bd_pins wasm_fpga_loader/Memory_Sel] [get_bd_pins wasm_fpga_memory_interconnect/Loader_Sel]
+  connect_bd_net -net wasm_fpga_loader_Memory_Stb [get_bd_pins ila_0/probe10] [get_bd_pins wasm_fpga_loader/Memory_Stb] [get_bd_pins wasm_fpga_memory_interconnect/Loader_Stb]
+  connect_bd_net -net wasm_fpga_loader_Memory_We [get_bd_pins ila_0/probe14] [get_bd_pins wasm_fpga_loader/Memory_We] [get_bd_pins wasm_fpga_memory_interconnect/Loader_We]
+  connect_bd_net -net wasm_fpga_memory_interconnect_Flash_Ack [get_bd_pins ila_0/probe8] [get_bd_pins wasm_fpga_flash/Module_Ack] [get_bd_pins wasm_fpga_memory_interconnect/Flash_Ack]
+  connect_bd_net -net wasm_fpga_memory_interconnect_Flash_DatOut [get_bd_pins ila_0/probe7] [get_bd_pins wasm_fpga_flash/Module_DatIn] [get_bd_pins wasm_fpga_memory_interconnect/Flash_DatOut]
+  connect_bd_net -net wasm_fpga_memory_interconnect_Loader_Ack [get_bd_pins ila_0/probe16] [get_bd_pins wasm_fpga_loader/Memory_Ack] [get_bd_pins wasm_fpga_memory_interconnect/Loader_Ack]
+  connect_bd_net -net wasm_fpga_memory_interconnect_Loader_DatOut [get_bd_pins ila_0/probe15] [get_bd_pins wasm_fpga_loader/Memory_DatIn] [get_bd_pins wasm_fpga_memory_interconnect/Loader_DatOut]
+  connect_bd_net -net wasm_fpga_memory_interconnect_Memory_Adr [get_bd_pins ila_0/probe23] [get_bd_pins wasm_fpga_memory_interconnect/Memory_Adr] [get_bd_pins wasm_fpga_module_memory/Adr]
+  connect_bd_net -net wasm_fpga_memory_interconnect_Memory_Cyc [get_bd_pins ila_0/probe22] [get_bd_pins wasm_fpga_memory_interconnect/Memory_Cyc] [get_bd_pins wasm_fpga_module_memory/Cyc]
+  connect_bd_net -net wasm_fpga_memory_interconnect_Memory_DatOut [get_bd_pins ila_0/probe17] [get_bd_pins wasm_fpga_memory_interconnect/Memory_DatOut] [get_bd_pins wasm_fpga_module_memory/DatIn]
+  connect_bd_net -net wasm_fpga_memory_interconnect_Memory_Sel [get_bd_pins ila_0/probe21] [get_bd_pins wasm_fpga_memory_interconnect/Memory_Sel] [get_bd_pins wasm_fpga_module_memory/Sel]
+  connect_bd_net -net wasm_fpga_memory_interconnect_Memory_Stb [get_bd_pins ila_0/probe18] [get_bd_pins wasm_fpga_memory_interconnect/Memory_Stb] [get_bd_pins wasm_fpga_module_memory/Stb]
+  connect_bd_net -net wasm_fpga_memory_interconnect_Memory_We [get_bd_pins ila_0/probe24] [get_bd_pins wasm_fpga_memory_interconnect/Memory_We] [get_bd_pins wasm_fpga_module_memory/We]
+  connect_bd_net -net wasm_fpga_module_memory_Ack [get_bd_pins ila_0/probe20] [get_bd_pins wasm_fpga_memory_interconnect/Memory_Ack] [get_bd_pins wasm_fpga_module_memory/Ack]
+  connect_bd_net -net wasm_fpga_module_memory_DatOut [get_bd_pins ila_0/probe19] [get_bd_pins wasm_fpga_memory_interconnect/Memory_DatIn] [get_bd_pins wasm_fpga_module_memory/DatOut]
   connect_bd_net -net wasm_fpga_uart_0_UartTx [get_bd_ports UartTx] [get_bd_pins wasm_fpga_uart/UartTx]
 
   # Create address segments
