@@ -1,30 +1,23 @@
-# Clocks
-create_clock -period 83.330 -name CLK_12M -waveform {0.000 41.660} -add [get_ports Clk12M]
+create_clock -period 10.000 -name VIRTUAL_Clk100M_SystemClockGenerator -waveform {0.000 5.000}
 
-set_clock_groups -asynchronous \
-    -group [get_clocks CLK_12M] \
-    -group [get_clocks -of_objects [get_pins SystemClockGenerator_i/inst/mmcm_adv_inst/CLKOUT0]
+set_input_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -min -add_delay 1.000 [get_ports MiSo]
+set_input_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -max -add_delay 3.000 [get_ports MiSo]
+set_input_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -min -add_delay 1.000 [get_ports Rst]
+set_input_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -max -add_delay 3.000 [get_ports Rst]
+set_input_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -min -add_delay 1.000 [get_ports UartRx]
+set_input_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -max -add_delay 3.000 [get_ports UartRx]
+set_output_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -min -add_delay 0.500 [get_ports Active]
+set_output_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -max -add_delay 0.500 [get_ports Active]
+set_output_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -min -add_delay 0.500 [get_ports Loaded]
+set_output_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -max -add_delay 0.500 [get_ports Loaded]
+set_output_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -min -add_delay 0.500 [get_ports MoSi]
+set_output_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -max -add_delay 1.500 [get_ports MoSi]
+set_output_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -min -add_delay 0.500 [get_ports SClk]
+set_output_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -max -add_delay 0.500 [get_ports SClk]
+set_output_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -min -add_delay 0.500 [get_ports UartTx]
+set_output_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -max -add_delay 0.500 [get_ports UartTx]
+set_output_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -min -add_delay 0.500 [get_ports nCs]
+set_output_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -max -add_delay 1.500 [get_ports nCs]
 
-# Input delay
-set_input_delay -clock [get_clocks CLK_12M] -max 3.000 [get_ports Rst]
-set_input_delay -clock [get_clocks CLK_12M] -min 1.000 [get_ports Rst]
-set_input_delay -clock [get_clocks CLK_12M] -max 3.000 [get_ports MiSo]
-set_input_delay -clock [get_clocks CLK_12M] -min 1.000 [get_ports MiSo]
-set_input_delay -clock [get_clocks CLK_12M] -max 3.000 [get_ports UartRx]
-set_input_delay -clock [get_clocks CLK_12M] -min 1.000 [get_ports UartRx]
-
-# Output delay
-set_output_delay -clock [get_clocks CLK_12M] -min 1.000 [get_ports Loaded]
-set_output_delay -clock [get_clocks CLK_12M] -max 3.000 [get_ports Loaded]
-set_output_delay -clock [get_clocks CLK_12M] -min 1.000 [get_ports Trap]
-set_output_delay -clock [get_clocks CLK_12M] -max 3.000 [get_ports Trap]
-set_output_delay -clock [get_clocks CLK_12M] -min 1.000 [get_ports Active]
-set_output_delay -clock [get_clocks CLK_12M] -max 3.000 [get_ports Active]
-set_output_delay -clock [get_clocks CLK_12M] -min 1.000 [get_ports MoSi]
-set_output_delay -clock [get_clocks CLK_12M] -max 3.000 [get_ports MoSi]
-set_output_delay -clock [get_clocks CLK_12M] -min 1.000 [get_ports SClk]
-set_output_delay -clock [get_clocks CLK_12M] -max 3.000 [get_ports SClk]
-set_output_delay -clock [get_clocks CLK_12M] -min 1.000 [get_ports UartTx]
-set_output_delay -clock [get_clocks CLK_12M] -max 3.000 [get_ports UartTx]
-set_output_delay -clock [get_clocks CLK_12M] -min 1.000 [get_ports nCs]
-set_output_delay -clock [get_clocks CLK_12M] -max 3.000 [get_ports nCs]
+set_output_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -min -add_delay 0.500 [get_ports Trap]
+set_output_delay -clock [get_clocks VIRTUAL_Clk100M_SystemClockGenerator] -max -add_delay 0.500 [get_ports Trap]
