@@ -25,6 +25,7 @@ prepare:
 prepare-dependencies:
 	(cd ../wasm-fpga-bus && make hxs)
 	(cd ../wasm-fpga-engine && make hxs)
+	(cd ../wasm-fpga-control && make hxs)
 	(cd ../wasm-fpga-loader && make hxs)
 	(cd ../wasm-fpga-store && make hxs)
 	(cd ../wasm-fpga-stack && make hxs)
