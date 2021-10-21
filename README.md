@@ -28,33 +28,41 @@ part of it:
 * Vivado 2019.2
 * [The WebAssembly Binary Toolkit]
 
-## Build
+## Development
 
-This repository contains a Makefile that offers some targets for convenience.
+In order to work on the WebAssembly FPGA a workspace must be set up according to
+the following instructions.
 
-### Create Vivado project
+```console
+~$ sudo apt-get install python3.6 python3-pip python3-venv python3-wheel
+```
 
-The `project` target sets up the Vivado project for development.
+Setup a virtual environment that installs the dependencies.
 
-    ~$ make project
+```console
+~$ python3 -m venv .venv
+~$ source .venv/bin/activate
+~$ pip3 install wheel
+~$ pip3 install -r requirements.txt
+```
 
-### Write board design to TCL script
+Afterwards, the make target `project` sets up the Vivado project that is used
+for development.
 
-The Make target `write_block_design` is used to write changes of the block design
-to the file `scripts/wasm_fpga_block_design.tcl`.
+```bash
+~$ make project
+```
 
-    ~$ make write_block_design
+The make target `build` is used create a bitstream and `XSA` file. Both files can
+be found in the `work` folder.
 
-### Clean
+```bash
+~$ make build
+```
 
-The target `clean` removes temporary files or files that are not under version
-control.
+# Flash
 
-    ~$ make clean
-
-## Known Issues
-
-Bitstream cannot be created since the project is experimental and under development.
+TBD
 
 [CMOD A7-35T]: https://store.digilentinc.com/cmod-a7-breadboardable-artix-7-fpga-module/
 [WebAssembly Control]: https://github.com/denisvasilik/wasm-fpga-control

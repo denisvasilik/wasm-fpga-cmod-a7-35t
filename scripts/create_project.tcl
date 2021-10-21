@@ -4,6 +4,7 @@ set project_name "WasmFpgaCmodA7-35T"
 set project_part "xc7a35tcpg236-1"
 set project_src  "src"
 set project_src_gen "hxs_gen"
+set project_venv ".venv"
 set project_ip "ip"
 set project_tb "tb"
 set project_package "package"
@@ -47,20 +48,10 @@ printMessage "Set IP repository paths"
 
 set obj [get_filesets sources_1]
 
-set_property "ip_repo_paths" "\
- [file normalize "${project_origin}/vivado-bus-abstraction-wb"] \
- [file normalize "${project_origin}/wasm-fpga-interconnect"] \
- [file normalize "${project_origin}/wasm-fpga-memory"] \
- [file normalize "${project_origin}/wasm-fpga-engine"] \
- [file normalize "${project_origin}/wasm-fpga-loader"] \
- [file normalize "${project_origin}/wasm-fpga-stack"] \
- [file normalize "${project_origin}/wasm-fpga-store"] \
- [file normalize "${project_origin}/wasm-fpga-bus"] \
- [file normalize "${project_origin}/wasm-fpga-control"] \
- [file normalize "${project_origin}/wasm-fpga-uart"] \
- [file normalize "${project_origin}/wasm-fpga-debug"] \
- [file normalize "${project_origin}/wasm-fpga-flash"] \
- " $obj
+set_property ip_repo_paths [list \
+  "[file normalize "${project_ip}"]" \
+  "[file normalize "${project_venv}"]" \
+] $obj
 
 # Rebuild user ip_repo's index before adding any source files
 update_ip_catalog -rebuild
@@ -85,6 +76,10 @@ foreach i $files_vhd {
     set file_obj [get_files -of_objects [get_filesets sources_1] [file tail [list $i]]]
     set_property -name "file_type" -value "VHDL" -objects $file_obj
 }
+
+set file [file normalize "${project_src}/TimeGenerator.vhd"]
+set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
+set_property -name "file_type" -value "VHDL 2008" -objects $file_obj
 
 set obj [get_filesets sources_1]
 set_property -name "top" -value "WasmFpgaTop" -objects $obj

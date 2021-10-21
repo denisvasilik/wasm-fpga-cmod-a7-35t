@@ -3,6 +3,9 @@ PWD=$(shell pwd)
 
 all: project
 
+install-requirements-from-test-pypi:
+	pip3 install -r requirements.txt -i https://test.pypi.org/simple/
+
 convert:
 	wat2wasm resources/WasmFpgaModule.wat -o resources/WasmFpgaModule.wasm
 	wat2wasm resources/WasmFpgaModule.wat -v 2> resources/WasmFpgaModule.txt
