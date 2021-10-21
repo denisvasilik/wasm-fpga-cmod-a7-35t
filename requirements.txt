@@ -1,0 +1,12 @@
+wasm-fpga-engine==0.0.0a4
+wasm-fpga-stack==0.0.0a3
+wasm-fpga-memory==0.0.0a1
+wasm-fpga-control==0.0.0
+wasm-fpga-flash==0.0.0a2
+wasm-fpga-loader==0.0.0a1
+wasm-fpga-debug==0.0.0a2
+wasm-fpga-store==0.0.0
+wasm-fpga-bus==0.0.0
+wasm-fpga-interconnect==0.0.0a1
+wasm-fpga-uart==0.0.0
+wasm-fpga-uart-interconnect==0.0.0

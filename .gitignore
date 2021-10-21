@@ -11,3 +11,4 @@ resources/n25q128a13e_3v_micronxip_vg12.tar.gz
 simstm/src-gen
 src-gen/
 tb/N25Q128A13E_VG12/
+.venv
